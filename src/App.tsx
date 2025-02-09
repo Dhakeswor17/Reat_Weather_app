@@ -1,7 +1,10 @@
+import SearchPlaces from "./components/searchPlaces"
 
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+      <SearchPlaces></SearchPlaces>
+    </div>
   )
 }
 
