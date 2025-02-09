@@ -1,4 +1,4 @@
-import SearchPlaces from "./components/searchPlaces"
+import SearchPlaces from "./components/SearchPlaces"
 
 const App = () => {
   return (
