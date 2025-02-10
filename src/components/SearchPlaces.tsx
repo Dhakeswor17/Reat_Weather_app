@@ -56,7 +56,8 @@ const SearchPlaces = () => {
 
   return (
     <div className="search-form">
-      <Box component="section">
+      <Box component="section"
+      className="search-box">
         <TextField
           id="outlined-basic"
           label="Enter Location"
