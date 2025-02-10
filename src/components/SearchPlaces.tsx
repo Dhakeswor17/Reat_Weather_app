@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { Fab, TextField, Box, Typography, CircularProgress } from "@mui/material";
+import { Fab, TextField, Box, Typography, CircularProgress, Card, CardContent } from "@mui/material";
 import NavigationIcon from "@mui/icons-material/Navigation";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import CloudIcon from "@mui/icons-material/Cloud";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
 import axios from "axios";
 
 import "./styles/searchPlaces.scss";
@@ -54,43 +57,57 @@ const SearchPlaces = () => {
     }
   };
 
+  // Choose weather icon
+  const getWeatherIcon = (condition: string) => {
+    if (condition.toLowerCase().includes("sunny")) return <WbSunnyIcon fontSize="large" />;
+    if (condition.toLowerCase().includes("cloud")) return <CloudIcon fontSize="large" />;
+    if (condition.toLowerCase().includes("snow")) return <AcUnitIcon fontSize="large" />;
+    return <CloudIcon fontSize="large" />;
+  };
+
   return (
-    <div className="search-form">
-      <Box component="section"
-      className="search-box">
+    <div className="search-container">
+      <Box className="search-box">
         <TextField
-          id="outlined-basic"
           label="Enter Location"
           variant="outlined"
           placeholder="Enter city or country"
           value={location}
           onChange={handleInputChange}
-          sx={{ margin: "10px" }}
+          fullWidth
+          sx={{ marginBottom: "15px", backgroundColor: "white", borderRadius: "5px" }}
         />
-        <Fab variant="extended" onClick={handleSearch}
-        sx={{backgroundColor:"#415980"}}
-        >
-          Search
-        </Fab>
-        <Fab variant="extended" 
-        onClick={handleUseCurrentLocation}
-         sx={{ marginLeft: "10px", backgroundColor:"#415980"}}>
-          <NavigationIcon sx={{ mr: 1 }} />
-          Use Current Location
-        </Fab>
+        <div className="button-group">
+          <Fab variant="extended" onClick={handleSearch} className="search-btn">
+            Search
+          </Fab>
+          <Fab variant="extended" onClick={handleUseCurrentLocation} className="location-btn">
+            <NavigationIcon sx={{ mr: 1 }} />
+            Use Current Location
+          </Fab>
+        </div>
 
         {/* Show Loading */}
         {loading && <CircularProgress sx={{ display: "block", margin: "20px auto" }} />}
 
         {/* Show Weather Data */}
         {weather && !loading && (
-          <Box className="weather-info">
-            <Typography variant="h5">{weather.location.name}, {weather.location.country}</Typography>
-            <Typography variant="h6">Temperature: {weather.current.temp_c}°C</Typography>
-            <Typography>Condition: {weather.current.condition.text}</Typography>
-            <Typography>Humidity: {weather.current.humidity}%</Typography>
-            <Typography>Wind Speed: {weather.current.wind_kph} km/h</Typography>
-          </Box>
+          <Card className="weather-card">
+            <CardContent>
+              <Typography variant="h5" className="location-text">
+                {weather.location.name}, {weather.location.country}
+              </Typography>
+              <div className="weather-info">
+                {getWeatherIcon(weather.current.condition.text)}
+                <Typography variant="h6">{weather.current.condition.text}</Typography>
+              </div>
+              <Typography variant="h4" className="temperature-text">
+                {weather.current.temp_c}°C
+              </Typography>
+              <Typography>Humidity: {weather.current.humidity}%</Typography>
+              <Typography>Wind Speed: {weather.current.wind_kph} km/h</Typography>
+            </CardContent>
+          </Card>
         )}
 
         {/* Show Error */}
